@@ -57,7 +57,7 @@ Click the image above to view the app demo video.
 
 ### Question 3: Counter with State Management
 
-- BLoC pattern implementation
+- SetState pattern implementation
 - Minimum value constraint (≥ 0)
 - Clean UI with centered counter display
 

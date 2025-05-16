@@ -69,7 +69,7 @@ class _PostPageState extends State<PostPage> {
           BlocBuilder<PostBloc, PostState>(
             bloc: _postBloc,
             builder: (context, state) {
-              if (state is PostInitial) {
+            if (state is PostInitial) {
                 return _buildEmptyState('Tap refresh to load posts');
               } else if (state is PostLoading) {
                 return _buildLoadingState();

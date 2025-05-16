@@ -1,7 +1,5 @@
 # Physiomobile Mobile Developer Test App
 
-![App Preview](assets/screenshot/1.jpg)
-
 A Flutter application that fulfills all requirements for the Physiomobile Mobile Developer Test, including API fetching with offline caching, form validation, and a counter app with state management.
 
 ## Features
@@ -21,7 +19,7 @@ A Flutter application that fulfills all requirements for the Physiomobile Mobile
 
 ## Video Demo
 
-[![App Demo](assets/screenshot/6.jpg)](assets/videos/demo.mp4)
+[Download Demo](assets/videos/demo.mp4)
 
 Click the image above to view the app demo video.
 
@@ -70,7 +68,7 @@ UI design inspired by:
 
 ## Download APK
 
-[![Download APK](assets/screenshot/10.jpg)](assets/apk/Physiomobile%20Test%20App.apk)
+[Download Apk](assets/apk/Physiomobile%20Test%20App.apk)
 
 Click the image above to download the APK file.
 

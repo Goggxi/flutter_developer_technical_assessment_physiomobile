@@ -15,9 +15,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
   Future<List<Post>> getPosts() async {
     try {
       final response = await client.get(
-        Uri.parse(
-          '${String.fromEnvironment('JSON_PLACEHOLDER_API_URL')}/posts',
-        ),
+        Uri.parse('https://jsonplaceholder.typicode.com/posts'),
         headers: {'Content-Type': 'application/json'},
       );
 

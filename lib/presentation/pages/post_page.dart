@@ -38,6 +38,30 @@ class _PostPageState extends State<PostPage> {
         backgroundColor: Colors.transparent,
         foregroundColor: AppColors.darkPrimary,
         elevation: 0,
+        actions: [
+          BlocBuilder<PostBloc, PostState>(
+            bloc: _postBloc,
+            builder: (context, state) {
+              return IconButton(
+                icon: Icon(
+                  state.viewType == PostViewType.list
+                      ? Icons.grid_view
+                      : Icons.list,
+                  color: AppColors.darkPrimary,
+                ),
+                onPressed: () {
+                  _postBloc.add(
+                    ChangeViewTypeEvent(
+                      state.viewType == PostViewType.list
+                          ? PostViewType.grid
+                          : PostViewType.list,
+                    ),
+                  );
+                },
+              );
+            },
+          ),
+        ],
       ),
       body: Stack(
         children: [
@@ -50,7 +74,7 @@ class _PostPageState extends State<PostPage> {
               } else if (state is PostLoading) {
                 return _buildLoadingState();
               } else if (state is PostLoaded) {
-                return _buildPostList(state.posts);
+                return _buildPostsView(state.posts, state.viewType);
               } else if (state is PostError) {
                 return _buildErrorState(state.message);
               }
@@ -81,6 +105,22 @@ class _PostPageState extends State<PostPage> {
     );
   }
 
+  Widget _buildPostsView(List<Post> posts, PostViewType viewType) {
+    return RefreshIndicator(
+      onRefresh: () async {
+        context.read<PostBloc>().add(RefreshPostsEvent());
+      },
+      backgroundColor: AppColors.solidPurple,
+      color: AppColors.darkPrimary,
+      child:
+          posts.isEmpty
+              ? _buildEmptyState('No posts available')
+              : viewType == PostViewType.list
+              ? _buildPostList(posts)
+              : _buildPostGrid(posts),
+    );
+  }
+
   Widget _buildPostList(List<Post> posts) {
     return RefreshIndicator(
       onRefresh: () async {
@@ -100,6 +140,23 @@ class _PostPageState extends State<PostPage> {
                   return PostCard(post: post);
                 },
               ),
+    );
+  }
+
+  Widget _buildPostGrid(List<Post> posts) {
+    return GridView.builder(
+      padding: const EdgeInsets.all(16),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 16,
+        mainAxisSpacing: 16,
+        childAspectRatio: 0.8,
+      ),
+      itemCount: posts.length,
+      itemBuilder: (context, index) {
+        final post = posts[index];
+        return PostCard(post: post, isGridItem: true);
+      },
     );
   }
 

@@ -12,18 +12,19 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   PostBloc({required this.repository}) : super(PostInitial()) {
     on<FetchPostsEvent>(_onFetchPosts);
     on<RefreshPostsEvent>(_onRefreshPosts);
+    on<ChangeViewTypeEvent>(_onChangeViewType);
   }
 
   Future<void> _onFetchPosts(
     FetchPostsEvent event,
     Emitter<PostState> emit,
   ) async {
-    emit(PostLoading());
+    emit(PostLoading(viewType: state.viewType));
     try {
       final posts = await repository.getPosts();
-      emit(PostLoaded(posts: posts));
+      emit(PostLoaded(posts: posts, viewType: state.viewType));
     } catch (e) {
-      emit(PostError(message: e.toString()));
+      emit(PostError(message: e.toString(), viewType: state.viewType));
     }
   }
 
@@ -31,13 +32,26 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     RefreshPostsEvent event,
     Emitter<PostState> emit,
   ) async {
-    emit(PostLoading());
+    emit(PostLoading(viewType: state.viewType));
     try {
       await repository.refreshPosts();
       final posts = await repository.getPosts();
-      emit(PostLoaded(posts: posts));
+      emit(PostLoaded(posts: posts, viewType: state.viewType));
     } catch (e) {
-      emit(PostError(message: e.toString()));
+      emit(PostError(message: e.toString(), viewType: state.viewType));
+    }
+  }
+
+  void _onChangeViewType(ChangeViewTypeEvent event, Emitter<PostState> emit) {
+    if (state is PostLoaded) {
+      emit(
+        PostLoaded(
+          posts: (state as PostLoaded).posts,
+          viewType: event.viewType,
+        ),
+      );
+    } else {
+      emit(PostInitial());
     }
   }
 }
